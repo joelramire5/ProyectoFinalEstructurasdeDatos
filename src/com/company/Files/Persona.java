@@ -6,6 +6,9 @@ public class Persona {
     int tiempoTramite;
     int tiempoCola;
     boolean isInCaja;
+    int id;
+    static int contadorId;
+    boolean tramiteTerminado = false;
 
 
     public Persona(){
@@ -13,6 +16,8 @@ public class Persona {
         generarTiempo();
         tiempoCola = 0;
         isInCaja = false;
+        id = contadorId;
+        contadorId++;
     }
 
     public void generarTiempo() {

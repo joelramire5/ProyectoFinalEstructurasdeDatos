@@ -32,22 +32,25 @@ public class Logica {
 
     int simulationTime = 0;
 
-    private void procesoDeColasTiempo(int cantidadDeCajas){
+    private void procesoDeColasUno(int cantidadDeCajas){
 
         for(int  i = 0; i < cantidadDeCajas; i++){
 
-
             if(cajas[i].estaocupada()){
 
+                System.out.println("La persona en la caja " + i + " es la persona id: " + cajas[i].persona.id);
+
                 if(cajas[i].persona.tiempoTranscurridoEnTramite == cajas[i].persona.tiempoTramite){
+                    cajas[i].persona.isInCaja = false;
+                    cajas[i].persona.tramiteTerminado = true;
+                    System.out.println("Una persona id: " +cajas[i].persona.id + " ha terminado su tramite con un tiempo de:" + cajas[i].persona.tiempoTranscurridoEnTramite);
                     cajas[i].persona = null;
+
                 }else{
                     cajas[i].persona.tiempoTranscurridoEnTramite++;
+                    System.out.println("Se ha aumentado el tiempo de tramite de una persona id: " +cajas[i].persona.id + " con un tiempo tramite transcurrido: " +cajas[i].persona.tiempoTranscurridoEnTramite );
                 }
-
             }
-
-
         }
     }
 
@@ -59,11 +62,12 @@ public class Logica {
             for(int  i = 0; i < cantidadDeCajas; i++) {
 
                 if (!cajas[i].estaocupada()) {
+                    System.out.println("Se ha pasado una persona id: " + prioridad.peek().id + " de prioridad a una caja");
                     cajas[i].persona = prioridad.poll();
                     if(cajas[i].persona != null){
                         cajas[i].persona.isInCaja = true;
                     }
-
+                    break;
                 }
             }
         }
@@ -72,6 +76,7 @@ public class Logica {
             for (int i = 0; i < cantidadDeCajas; i++) {
 
                 if (!cajas[i].estaocupada()) {
+                    System.out.println("Se ha pasado una persona id: " + noprioridad.peek().id + " de no prioridad a una caja");
                     cajas[i].persona = noprioridad.poll();
                     cajas[i].persona.isInCaja = true;
                 }
@@ -80,14 +85,19 @@ public class Logica {
         }
     }
 
+
+    //Se debe recorrer toda la cola, sin modificarla, aumentando el tiempo en cola +1
     private void procesoDeColasTres(){
         if(prioridad != null){
 
             Queue<Persona> prioridadTemp = new LinkedList<>();
 
-            for(int i = 0; i < prioridad.size();i++){
-                prioridad.peek().tiempoCola++;
-                prioridadTemp.add(prioridad.poll());
+            while(!prioridad.isEmpty()){
+                if(prioridad.peek() != null){
+                    prioridad.peek().tiempoCola++;
+                    System.out.println("Se ha incrementado el tiempo en cola de una persona id: " + prioridad.peek().id + " de prioridad con un tiempo en cola total: " + prioridad.peek().tiempoCola);
+                    prioridadTemp.add(prioridad.poll());
+                }
             }
 
             prioridad = prioridadTemp;
@@ -97,73 +107,106 @@ public class Logica {
 
             Queue<Persona> prioridadTemp = new LinkedList<>();
 
-            for(int i = 0; i < noprioridad.size();i++){
-                noprioridad.peek().tiempoCola++;
-                prioridadTemp.add(noprioridad.poll());
+            while(!noprioridad.isEmpty()){
+                if(noprioridad.peek() != null){
+                    noprioridad.peek().tiempoCola++;
+                    System.out.println("Se ha incrementado el tiempo en cola de una persona id: " + noprioridad.peek().id + " de no prioridad con un tiempo en cola total: " + noprioridad.peek().tiempoCola);
+                    prioridadTemp.add(noprioridad.poll());
+                }
             }
-
             noprioridad = prioridadTemp;
 
         }
 
     }
 
+    private void procesoDeColasCuatro(String []Personas, int cantidadCajas){
+        Persona persona;
+
+        for(int i = 0; i < Integer.parseInt(Personas[1]); i++){
+            persona = new Persona();
+            listaPersonas.add(persona);
+            boolean agregadoCaja = false;
+
+            for(int e = 0; e < cantidadCajas; e++){
+
+                if(!cajas[e].estaocupada()){
+                    cajas[e].persona = persona;
+                    persona.isInCaja = true;
+                    agregadoCaja = true;
+                    System.out.println("Se ha agregado una persona id:" + persona.id+  " de prioridad nueva a la caja " + e + " con un tiempo de tramite de: " + persona.tiempoTramite);
+
+                    break;
+                }
+            }
+
+            if(!agregadoCaja){
+                prioridad.add(persona);
+                System.out.println("Se ha agregado una persona id:" + persona.id+  " de prioridad nueva a la cola con un tiempo de tramite de: " + persona.tiempoTramite);
+
+            }
+
+        }
+
+        for(int i = 0; i < Integer.parseInt(Personas[0]); i++){
+            persona = new Persona();
+            listaPersonas.add(persona);
+             boolean agregadoCaja = false;
+
+            for(int e = 0; e < cantidadCajas; e++){
+
+                if(!cajas[e].estaocupada()){
+                    cajas[e].persona = persona;
+                    persona.isInCaja = true;
+                    agregadoCaja = true;
+                    System.out.println("Se ha agregado una persona id:" + persona.id +  " de no prioridad nueva a la caja " + e + " con un tiempo de tramite de: " + persona.tiempoTramite);
+
+                    break;
+                }
+            }
+
+            if(!agregadoCaja){
+                noprioridad.add(persona);
+                System.out.println("Se ha agregado una persona id:" + persona.id +  " de no prioridad nueva a la cola con un tiempo de tramite de: " + persona.tiempoTramite);
+
+            }
+
+        }
+    }
+
+    private void initCajas(int cantidadCajas){
+        cajas = new Caja[cantidadCajas];
+        for(int  i = 0; i < cantidadCajas; i++){
+            cajas[i] = new Caja(false);
+        }
+    }
+
     public void Data(int cantidadCajas) {
 
-        cajas = new Caja[cantidadCajas];
-        cajas[0] = new Caja(false);
-        cajas[1] = new Caja(false);
+        initCajas(cantidadCajas);
+
 
         //Esta ejeciucion es por minuto
         try {
+            int contador = 1;
             Scanner lector = new Scanner(new File("C:\\Users\\taera\\IdeaProjects\\ProyectoFinalEstructurasdeDatos\\src\\com\\company\\Files\\SimulationFIle.txt"));
             while (lector.hasNextLine()) {
                 String[] Personas = lector.nextLine().split(",");
 
                 Persona persona;
 
+                System.out.println("\n\nMinuto " + contador + "\n\n");
+                contador++;
+
                //Primer proceso
-                procesoDeColasTiempo(cantidadCajas);
+                procesoDeColasUno(cantidadCajas);
                 //Segundo proceso
                 procesoDeColasDos(cantidadCajas);
                 //Tercer proceso
                 procesoDeColasTres();
+                //Cuarto proceoso
+                procesoDeColasCuatro(Personas, cantidadCajas);
 
-                for(int i = 0; i < Integer.parseInt(Personas[1]); i++){
-                    persona = new Persona();
-                    listaPersonas.add(persona);
-
-                    for(int e = 0; e < cantidadCajas; e++){
-
-                        if(!cajas[e].estaocupada()){
-                            cajas[e].persona = persona;
-                            persona.isInCaja = true;
-                            //break;
-                        }else{
-                            prioridad.add(persona);
-                        }
-
-                    }
-
-                }
-
-                for(int i = 0; i < Integer.parseInt(Personas[0]); i++){
-                    persona = new Persona();
-                    listaPersonas.add(persona);
-
-                    for(int e = 0; e < cantidadCajas; e++){
-
-                        if(!cajas[e].estaocupada()){
-                            cajas[e].persona = persona;
-                            persona.isInCaja = true;
-                            //break;
-                        }else{
-                            noprioridad.add(persona);
-                        }
-
-                    }
-
-                }
 
 
                 //noprioridad.add(Integer.parseInt(Personas[0]));
@@ -197,7 +240,7 @@ public class Logica {
         }
     }*/
 
-    public void obtenerTiempoPromedio(){
+    public void obtenerTiempoPromedioColas(){
 
         int promedio;
         int contadorTiempos  = 0;
@@ -205,13 +248,55 @@ public class Logica {
         for(int  i =0; i < listaPersonas.size(); i++){
 
             contadorTiempos += listaPersonas.get(i).tiempoCola;
+            //System.out.println(listaPersonas.get(i).tiempoCola);
 
         }
-
         System.out.println("Promedio de colas: " + contadorTiempos/listaPersonas.size());
-
-
     }
+    public void obtenerTiempoPromedioTramites(){
+
+        int promedio;
+        int contadorTiempos  = 0;
+
+        for(int  i =0; i < listaPersonas.size(); i++){
+
+            contadorTiempos += listaPersonas.get(i).tiempoTranscurridoEnTramite;
+            //System.out.println(listaPersonas.get(i).tiempoTranscurridoEnTramite);
+
+        }
+        System.out.println("Promedio de tramites: " + contadorTiempos/listaPersonas.size());
+    }
+
+    public void obtenerTiempoPromedioTotal(){
+
+        int promedio;
+        int contadorTiempos  = 0;
+
+        for(int  i =0; i < listaPersonas.size(); i++){
+
+            contadorTiempos += listaPersonas.get(i).tiempoTranscurridoEnTramite + listaPersonas.get(i).tiempoCola;
+            //System.out.println(listaPersonas.get(i).tiempoTranscurridoEnTramite);
+
+        }
+        System.out.println("Promedio de tiempo total: " + contadorTiempos/listaPersonas.size());
+    }
+
+    public void obtenerPersonasenColaYPromedio(){
+
+        int promedio;
+        int contadorTiempos  = 0;
+        int contadorPersonasCola = 0;
+
+        for(int  i =0; i < listaPersonas.size(); i++){
+
+            if(!listaPersonas.get(i).tramiteTerminado){
+                contadorPersonasCola++;
+                contadorTiempos += listaPersonas.get(i).tiempoCola;
+            }
+        }
+        System.out.println("Personas que se quedaron en cola: " + contadorPersonasCola + ", promedio de tiempo total en cola: " + contadorTiempos/contadorPersonasCola);
+    }
+
 
 }
 

@@ -6,8 +6,11 @@ public class Principal {
 
         Logica L = new Logica();
 
-        L.Data(2);
-        L.obtenerTiempoPromedio();
+        L.Data(8);
+        L.obtenerTiempoPromedioColas();
+        L.obtenerTiempoPromedioTramites();
+        L.obtenerTiempoPromedioTotal();
+        L.obtenerPersonasenColaYPromedio();
 
     }
 }
