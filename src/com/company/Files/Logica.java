@@ -1,6 +1,5 @@
 package com.company.Files;
 
-import com.company.Files.Cola.Cola;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,24 +12,16 @@ public class Logica {
 
     private static Scanner input = new Scanner(System.in);
 
-    //Caja cajasrep = new Caja();
-
-    //ArrayList<Integer> prioridad = new ArrayList<>();
-    //ArrayList<Integer> noprioridad = new ArrayList<>();
-
     ArrayList<Persona> listaPersonas = new ArrayList<>();
 
     Queue<Persona> prioridad = new LinkedList<>();
     Queue<Persona> noprioridad = new LinkedList<>();
 
-    //arreglar a dinamico
+
     Caja[] cajas;
 
-    Cola colaprioridad = new Cola();
-    Cola colanoprioridad = new Cola();
 
 
-    int simulationTime = 0;
 
     private void procesoDeColasUno(int cantidadDeCajas){
 
@@ -86,7 +77,6 @@ public class Logica {
     }
 
 
-    //Se debe recorrer toda la cola, sin modificarla, aumentando el tiempo en cola +1
     private void procesoDeColasTres(){
         if(prioridad != null){
 
@@ -209,10 +199,6 @@ public class Logica {
 
 
 
-                //noprioridad.add(Integer.parseInt(Personas[0]));
-                //prioridad.add(Integer.parseInt(Personas[1]));
-
-
             }
             lector.close();
 
@@ -226,19 +212,7 @@ public class Logica {
 
 
         }
-      /*
-    public void ocuparcaja() {
-        for (int i = 0; i < cajas.length; i++) {
 
-            if (cajasrep.estaocupada() == null) {
-                if (!colaprioridad.estaVacia()) {
-                    Persona persona = colaprioridad.quitar();
-                }
-            }
-
-
-        }
-    }*/
 
     public void obtenerTiempoPromedioColas(){
 
@@ -255,27 +229,25 @@ public class Logica {
     }
     public void obtenerTiempoPromedioTramites(){
 
-        int promedio;
+
         int contadorTiempos  = 0;
 
         for(int  i =0; i < listaPersonas.size(); i++){
 
-            contadorTiempos += listaPersonas.get(i).tiempoTranscurridoEnTramite;
-            //System.out.println(listaPersonas.get(i).tiempoTranscurridoEnTramite);
 
+            contadorTiempos += listaPersonas.get(i).tiempoTranscurridoEnTramite;
         }
-        System.out.println("Promedio de tramites: " + contadorTiempos/listaPersonas.size());
+        System.out.println("Contador  de tramites: " +contadorTiempos/listaPersonas.size());
+
     }
 
     public void obtenerTiempoPromedioTotal(){
 
-        int promedio;
         int contadorTiempos  = 0;
 
         for(int  i =0; i < listaPersonas.size(); i++){
 
             contadorTiempos += listaPersonas.get(i).tiempoTranscurridoEnTramite + listaPersonas.get(i).tiempoCola;
-            //System.out.println(listaPersonas.get(i).tiempoTranscurridoEnTramite);
 
         }
         System.out.println("Promedio de tiempo total: " + contadorTiempos/listaPersonas.size());
@@ -283,7 +255,6 @@ public class Logica {
 
     public void obtenerPersonasenColaYPromedio(){
 
-        int promedio;
         int contadorTiempos  = 0;
         int contadorPersonasCola = 0;
 

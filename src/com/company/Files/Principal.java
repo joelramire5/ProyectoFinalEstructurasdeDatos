@@ -1,16 +1,13 @@
 package com.company.Files;
 
+import com.company.Files.Interfaz.Interfaz;
+
 public class Principal {
 
     public static void main(String[] args) {
 
-        Logica L = new Logica();
-
-        L.Data(8);
-        L.obtenerTiempoPromedioColas();
-        L.obtenerTiempoPromedioTramites();
-        L.obtenerTiempoPromedioTotal();
-        L.obtenerPersonasenColaYPromedio();
+        Interfaz menu = new Interfaz();
+       menu.menuPrincipal();
 
     }
 }
