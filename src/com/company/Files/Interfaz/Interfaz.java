@@ -6,9 +6,8 @@ import java.util.Scanner;
 
 public class Interfaz {
     private static Scanner input = new Scanner(System.in);
-    private static int option = 0;
     Logica L = new Logica();
-
+    int cantidaddecajas;
 
 
     public void menuPrincipal() {
@@ -17,7 +16,8 @@ public class Interfaz {
         System.out.println("------- Bienvenido al simulador de colas de espera del Banco Caliche ------");
         System.out.println("--------------------------------------------------");
         System.out.println("Seleccione el numero de cajas que desea ingresar: ");
-        L.Data(this.CantidaddeCajas());
+        cantidaddecajas=input.nextInt();
+        L.Data(cantidaddecajas);
         L.obtenerTiempoPromedioColas();
         L.obtenerTiempoPromedioTramites();
         L.obtenerTiempoPromedioTotal();
@@ -30,11 +30,6 @@ public class Interfaz {
 
     }
 
-    public int CantidaddeCajas(){
-        System.out.println("Ingrese la Cantidad de Cajas");
-
-        return input.nextInt();
-    }
 
 }
 
