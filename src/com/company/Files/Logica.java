@@ -73,7 +73,7 @@ public class Logica {
 
                 if (!cajas[i].estaocupada()) {
                     System.out.println("Se ha pasado una persona id: " + noprioridad.peek().id + " de no prioridad a una caja");
-                    Persona persona=prioridad.poll();
+                    Persona persona=noprioridad.poll();
                     persona.generarTiempo();
                     cajas[i].persona = persona;
                     cajas[i].persona.isInCaja = true;
